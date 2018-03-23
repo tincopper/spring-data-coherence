@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<cache-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://xmlns.oracle.com/coherence/coherence-cache-config"
+              xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-cache-config http://xmlns.oracle.com/coherence/coherence-cache-config/1.1/coherence-cache-config.xsd">
+	<defaults>
+		<serializer>
+			<instance>
+				<class-name>com.tangosol.io.pof.ConfigurablePofContext</class-name>
+				<init-params>
+					<init-param>
+						<param-type>String</param-type>
+						<param-value system-property="tangosol.pof.config">cache-pof-config-message.xml
+						</param-value>
+					</init-param>
+				</init-params>
+			</instance>
+		</serializer>
+	</defaults>
+	<caching-scheme-mapping>
+	    <!-- 支付中心缓存配置  -->
+		<cache-mapping>
+			<cache-name>cache-pc-*</cache-name>
+			<scheme-name>payment-mios-dist</scheme-name>
+		</cache-mapping>
+		<!-- 充值中心缓存配置  -->
+		<cache-mapping>
+			<cache-name>cache-rc-*</cache-name>
+			<scheme-name>payment-mios-dist</scheme-name>
+		</cache-mapping>
+        <!-- 其它缓存配置  -->
+		<cache-mapping>
+			<cache-name>dist-extend-near</cache-name>
+			<scheme-name>extend-near</scheme-name>
+		</cache-mapping>
+		
+		<!-- 序列生成器 -->
+		<cache-mapping>
+            <cache-name>coherence.common.sequencegenerators</cache-name>
+            <scheme-name>distributed-scheme-for-sequence-generators</scheme-name>
+        </cache-mapping>
+        
+	</caching-scheme-mapping>
+
+	<caching-schemes>
+	
+		<distributed-scheme>
+            <scheme-name>distributed-scheme-for-sequence-generators</scheme-name>
+            <service-name>DistributedCacheForSequenceGenerators</service-name>
+
+            <backing-map-scheme>
+                <local-scheme/>
+            </backing-map-scheme>
+
+            <autostart>true</autostart>
+        </distributed-scheme>
+        
+		<near-scheme>
+			<scheme-name>extend-near</scheme-name>
+			<front-scheme>
+				<local-scheme>
+					<high-units>1000</high-units>
+				</local-scheme>
+			</front-scheme>
+			<back-scheme>
+				<remote-cache-scheme>
+					<scheme-ref>payment-mios-dist</scheme-ref>
+				</remote-cache-scheme>
+			</back-scheme>
+			<invalidation-strategy>all</invalidation-strategy>
+		</near-scheme>
+
+		<remote-cache-scheme>
+			<scheme-name>payment-mios-dist</scheme-name>
+			<service-name>ExtendTcpCacheService</service-name>
+			<initiator-config>
+				<tcp-initiator>
+					<remote-addresses>
+						<socket-address><address>172.21.10.54</address><port>9090</port></socket-address><socket-address><address>172.21.10.55</address><port>9090</port></socket-address><socket-address><address>172.21.10.56</address><port>9090</port></socket-address>
+					</remote-addresses>
+
+				</tcp-initiator>
+				<outgoing-message-handler>
+					<request-timeout>5s</request-timeout>
+				</outgoing-message-handler>
+			</initiator-config>
+		</remote-cache-scheme>
+
+		<remote-invocation-scheme>
+			<scheme-name>extend-invocation</scheme-name>
+			<service-name>ExtendTcpInvocationService</service-name>
+			<initiator-config>
+				<tcp-initiator>
+					<remote-addresses>
+						<socket-address><address>172.21.10.54</address><port>9090</port></socket-address><socket-address><address>172.21.10.55</address><port>9090</port></socket-address><socket-address><address>172.21.10.56</address><port>9090</port></socket-address>
+					</remote-addresses>
+				</tcp-initiator>
+				<outgoing-message-handler>
+					<request-timeout>5s</request-timeout>
+				</outgoing-message-handler>
+			</initiator-config>
+		</remote-invocation-scheme>
+	</caching-schemes>
+</cache-config>

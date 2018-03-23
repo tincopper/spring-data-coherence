@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!--
+Note: This XML document is an example Coherence POF Configuration deployment
+descriptor that should be customized, replaced or extended for your
+particular application requirements.
+
+For detailed information on each of the elements that can be used in this
+descriptor please see the Coherence POF Configuration document type
+descriptor: pof-config.xsd.
+-->
+
+<pof-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://xmlns.oracle.com/coherence/coherence-pof-config"
+              xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-pof-config coherence-pof-config.xsd">
+
+  <user-type-list>
+
+<!--     include all "standard" Coherence POF user types
+    <include>coherence-pof-config.xml</include>
+	<include>txn-pof-config.xml</include>
+	<include>seovic-coherence-pof-config.xml</include>
+ -->    
+	<!-- <user-type>  
+        <type-id>10001</type-id>  
+        <class-name>com.sitech.miso.spring.coherence.Contact</class-name>  
+    </user-type>
+    
+    <user-type>  
+        <type-id>10002</type-id>  
+        <class-name>com.sitech.miso.spring.coherence.Address</class-name>  
+    </user-type>
+    
+    <user-type>  
+        <type-id>10003</type-id>  
+        <class-name>com.sitech.miso.spring.coherence.People</class-name>  
+    </user-type> -->
+
+  </user-type-list>
+
+  <allow-interfaces>true</allow-interfaces>
+  <allow-subclasses>true</allow-subclasses>
+</pof-config>

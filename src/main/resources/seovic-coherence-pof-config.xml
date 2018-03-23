@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+
+<!--
+  ~ Copyright 2012 Aleksandar Seovic
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<pof-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://xmlns.oracle.com/coherence/coherence-pof-config"
+              xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-pof-config coherence-pof-config.xsd">
+
+  <user-type-list>
+   
+    <!-- com.tomgs.spring.data.coherence.core.aggregator.* classes -->
+    <user-type>
+      <type-id>11720</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.aggregator.TopAggregator</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11721</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.aggregator.TopAggregator$KeyValuePair</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11722</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.aggregator.TopAggregator$KeyValuePairExtractor</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.filter.* classes -->
+    <user-type>
+      <type-id>11740</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.filter.StartsWithFilter</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11741</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.filter.FilterAdapter</class-name>
+    </user-type>
+     <user-type>
+      <type-id>11742</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.filter.AnyWordStartsWithFilter</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.processor.* classes -->
+    <user-type>
+      <type-id>11750</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.BinaryExtractorProcessor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11751</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.BinaryNumberIncrementor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11752</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.BinaryPut</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11753</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.BinaryVersionedPut</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11754</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.MethodInvocationProcessor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11755</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.Put</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11756</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.Remove</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11757</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.ConditionalGet</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11758</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.processor.LocalCopyProcessor</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.collections.* classes -->
+    <user-type>
+      <type-id>11760</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.collections.PortableList</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11761</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.collections.PortableSet</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11765</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.collections.RemoteList$RemoteListProcessor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11766</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.collections.RemoteSet$RemoteSetProcessor</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.condition.* classes -->
+  	<user-type>
+      <type-id>11805</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.condition.ExpressionCondition</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.expression.* classes -->
+  	<user-type>
+      <type-id>11813</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.expression.ScriptExpression</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11814</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.expression.SpelExpression</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.extractor.* classes -->
+    <user-type>
+      <type-id>11820</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.ExpressionExtractor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11822</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.MapExtractor</class-name>
+    </user-type>
+ 	<user-type>
+      <type-id>11825</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.PropertyExtractor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11826</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.ScriptExtractor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11827</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.SpelExtractor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11828</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.XmlExtractor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11829</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.DynamicObjectExtractor</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.updater.* classes -->
+  	<user-type>
+      <type-id>11830</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.updater.BeanWrapperUpdater</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11832</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.updater.ExpressionUpdater</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11833</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.updater.MapUpdater</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11834</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.updater.PropertyUpdater</class-name>
+    </user-type>
+
+    <!-- com.tomgs.spring.data.coherence.core.factory.* classes -->
+  	<user-type>
+      <type-id>11840</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.ArrayListFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11841</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.HashMapFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11842</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.HashSetFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11843</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.LinkedHashMapFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11844</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.LinkedListFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11845</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.ReflectionFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11846</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.TreeMapFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11847</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.TreeSetFactory</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11848</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.factory.LinkedHashSetFactory</class-name>
+    </user-type>
+
+  <user-type>
+      <type-id>11811</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.expression.MvelExpression</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11812</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.expression.OgnlExpression</class-name>
+    </user-type>
+
+
+
+   <user-type>
+      <type-id>11823</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.MvelExtractor</class-name>
+    </user-type>
+    <user-type>
+      <type-id>11824</type-id>
+      <class-name>com.tomgs.spring.data.coherence.core.extractor.OgnlExtractor</class-name>
+    </user-type>
+  </user-type-list>
+
+</pof-config>

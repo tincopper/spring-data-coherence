@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<coherence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.oracle.com/coherence/coherence-operational-config">
+	
+
+	<configurable-cache-factory-config>
+		<init-params>
+			<init-param>
+				<param-type>java.lang.String</param-type>
+				<param-value system-property="tangosol.coherence.cacheconfig">
+					tangosol-coherence-cacheconfig-tomgs.xml
+				</param-value>
+			</init-param>
+		</init-params>
+	</configurable-cache-factory-config>
+	<license-config>
+		<edition-name system-property="tangosol.coherence.edition">GE</edition-name>
+		<license-mode system-property="tangosol.coherence.mode">prod</license-mode>
+	</license-config>
+</coherence>
