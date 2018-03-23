@@ -9,6 +9,7 @@
 				<init-params>
 					<init-param>
 						<param-type>String</param-type>
+						<!-- 可以通过系统属性配置覆盖 -->
 						<param-value system-property="tangosol.pof.config">cache-pof-config-message.xml
 						</param-value>
 					</init-param>
@@ -17,15 +18,15 @@
 		</serializer>
 	</defaults>
 	<caching-scheme-mapping>
-	    <!-- 支付中心缓存配置  -->
+	    <!-- pc后台缓存配置  -->
 		<cache-mapping>
 			<cache-name>cache-pc-*</cache-name>
-			<scheme-name>payment-mios-dist</scheme-name>
+			<scheme-name>chache-dist</scheme-name>
 		</cache-mapping>
-		<!-- 充值中心缓存配置  -->
+		<!-- h5后台缓存配置  -->
 		<cache-mapping>
-			<cache-name>cache-rc-*</cache-name>
-			<scheme-name>payment-mios-dist</scheme-name>
+			<cache-name>cache-h5-*</cache-name>
+			<scheme-name>chache-dist</scheme-name>
 		</cache-mapping>
         <!-- 其它缓存配置  -->
 		<cache-mapping>
@@ -63,19 +64,31 @@
 			</front-scheme>
 			<back-scheme>
 				<remote-cache-scheme>
-					<scheme-ref>payment-mios-dist</scheme-ref>
+					<scheme-ref>chache-dist</scheme-ref>
 				</remote-cache-scheme>
 			</back-scheme>
 			<invalidation-strategy>all</invalidation-strategy>
 		</near-scheme>
 
 		<remote-cache-scheme>
-			<scheme-name>payment-mios-dist</scheme-name>
+			<!-- 可以自行命名 -->
+			<scheme-name>chache-dist</scheme-name>
 			<service-name>ExtendTcpCacheService</service-name>
 			<initiator-config>
 				<tcp-initiator>
 					<remote-addresses>
-						<socket-address><address>172.21.10.54</address><port>9090</port></socket-address><socket-address><address>172.21.10.55</address><port>9090</port></socket-address><socket-address><address>172.21.10.56</address><port>9090</port></socket-address>
+						<socket-address>
+							<address>127.0.0.1</address>
+							<port>9090</port>
+						</socket-address>
+						<socket-address>
+							<address>127.0.0.1</address>
+							<port>9091</port>
+						</socket-address>
+						<socket-address>
+							<address>127.0.0.1</address>
+							<port>9092</port>
+						</socket-address>
 					</remote-addresses>
 
 				</tcp-initiator>
@@ -91,7 +104,18 @@
 			<initiator-config>
 				<tcp-initiator>
 					<remote-addresses>
-						<socket-address><address>172.21.10.54</address><port>9090</port></socket-address><socket-address><address>172.21.10.55</address><port>9090</port></socket-address><socket-address><address>172.21.10.56</address><port>9090</port></socket-address>
+						<socket-address>
+							<address>127.0.0.1</address>
+							<port>9090</port>
+						</socket-address>
+						<socket-address>
+							<address>127.0.0.1</address>
+							<port>9091</port>
+						</socket-address>
+						<socket-address>
+							<address>127.0.0.1</address>
+							<port>9092</port>
+						</socket-address>
 					</remote-addresses>
 				</tcp-initiator>
 				<outgoing-message-handler>
