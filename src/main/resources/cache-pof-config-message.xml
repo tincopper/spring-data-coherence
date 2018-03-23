@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<pof-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.oracle.com/coherence/coherence-pof-config"
+	xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-pof-config coherence-pof-config.xsd">
+	<user-type-list>
+	   <!-- Coherence 内部POF定义 -->
+		<include>coherence-pof-config.xml</include>
+		<!-- Coherence 序列生成器POF -->
+		<include>coherence-common-pof-config.xml</include>
+	    <!-- seovic POF定义 支持PortableSet-->
+		<include>seovic-coherence-pof-config.xml</include>
+	     <!-- 应用 POF定义 -->
+		<include>test-coherence-pof-config.xml</include>
+	</user-type-list>
+</pof-config>
