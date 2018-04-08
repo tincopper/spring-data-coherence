@@ -9,7 +9,7 @@
 # 如何使用
 1. spring集成spring-data-coherence
 只需在配置文件添加如下配置即可：
-```
+```xml
 <bean id="coherenceTemplate" class="com.tomgs.spring.data.coherence.support.CoherenceTemplate"/>
 ```
 2. 配置序列化实体
@@ -22,7 +22,7 @@ spring-data-coherence/src/main/resources/seovic-coherence-pof-config.xml
 
 可以在pof配置信息xml文件中查看`cache-pof-config-message.xml`，这个文件一般需要在项目中覆盖，然后在里面添加自己定义的pof配置文件如`test-coherence-pof-config.xml`
 
-```
+```xml
 <!-- cache-pof-config-message.xml示例 -->
 
 <?xml version="1.0"?>
@@ -47,7 +47,7 @@ spring-data-coherence/src/main/resources/seovic-coherence-pof-config.xml
 
 3. 实体POF序列化示例
 
-```
+```java
 public class PayUserDataSerializer implements PofSerializer {
 
 	private static final int ID = 0;
@@ -112,7 +112,7 @@ public class PayUserDataSerializer implements PofSerializer {
 4、使用示例
 
 `CoherenceBaseTest.java`
-```
+```java
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath:application-cache-coherence.xml")
 public class CoherenceBaseTest extends AbstractJUnit4SpringContextTests {
@@ -122,7 +122,7 @@ public class CoherenceBaseTest extends AbstractJUnit4SpringContextTests {
 ```
 
 `CoherenceTemplateTest.java`
-```
+```java
 public class CoherenceTemplateTest extends CoherenceBaseTest {
 	
 	@Resource(name = "coherenceTemplate")
