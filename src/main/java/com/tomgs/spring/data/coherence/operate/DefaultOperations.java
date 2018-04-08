@@ -39,10 +39,11 @@ import com.tomgs.spring.data.coherence.support.CoherenceTemplate;
 @SuppressWarnings("unchecked")
 public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 	
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	CoherenceTemplate<K, V> template;
-	ThreadLocal<String> cacheNameLocal = new ThreadLocal<String>();
+	private CoherenceTemplate<K, V> template;
+	
+	private ThreadLocal<String> cacheNameLocal = new ThreadLocal<String>();
 	
 	public DefaultOperations(CoherenceTemplate<K, V> template) {
 		this.template = template;
@@ -54,6 +55,7 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 	}
 	
 	public V put(final K k, final V v) {
+		
 		return template.execute(new CoherenceCallBack<V>() {
 			@Override
 			public V doInCoherence(NamedCache cache) throws DataAccessException {
@@ -62,7 +64,7 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 			}
 		}, cacheNameLocal);
 	}
-
+	
 	@Override
 	public V put(final K k, final V v, final long expireTime) {
 		return template.execute(new CoherenceCallBack<V>() {
@@ -124,6 +126,7 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 	
 	@Override
 	public Map<K, V> getAll(final Collection<K> collection) {
+		
 		return template.execute(new CoherenceCallBack<Map<K, V>>() {
 			@Override
 			public Map<K, V> doInCoherence(NamedCache cache) throws DataAccessException {
@@ -282,49 +285,54 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 		if (i == -1) {
 			return false;
 		}
-		return update(keyValue, i, value);
+		boolean result = update(keyValue, i, value);
+		return result;
 	}
 	
 	@Override
-	public V upsert(String keyName, K keyValue, String updateKeyName, final Object updateValue, Class<V> cls) {
+	public V upsert(final String keyName, final K keyValue, final String updateKeyName, final Object updateValue, final Class<V> cls) {
 		
-		V v = get(keyValue);
-		if (v == null) {
-			Map<String, Object> map = new ConcurrentHashMap<String, Object>();
-			map.put(keyName, keyValue);
-			map.put(updateKeyName, updateValue);
-			
-			try {
-				v = ValueMap.setValue(cls.newInstance(), map);
-				put(keyValue, v);
-			} catch (InstantiationException | IllegalAccessException e) {
-				logger.error("更新操作失败", e);
-			}
-			return v;
-		}
-		
-		if (updateValue instanceof Number) {
-			Number n = (Number) updateValue;
-			increment(keyValue, updateKeyName, n, true, cls);
-			return get(keyValue);
-		}
-		
-		//进行更新
-		int keySerial = ValueMap.getValue(keyName, cls);
-		int updateKeySerial = ValueMap.getValue(updateKeyName, cls);
-		
-		ValueExtractor key = new PofExtractor(String.class, keySerial);
-	    final Filter filter = new EqualsFilter(key, keyValue); 
-	    final ValueUpdater updater = new PofUpdater(updateKeySerial); 
-	    
-	    template.execute(new CoherenceCallBack<V>() {
+	    return template.execute(new CoherenceCallBack<V>() {
 			@Override
 			public V doInCoherence(NamedCache cache) throws DataAccessException {
-				return (V) cache.invoke(filter, new UpdaterProcessor(updater, updateValue)); 
+				
+				V v = (V) cache.get(keyValue);
+				if (v == null) {
+					Map<String, Object> map = new ConcurrentHashMap<String, Object>();
+					map.put(keyName, keyValue);
+					map.put(updateKeyName, updateValue);
+					
+					try {
+						v = ValueMap.setValue(cls.newInstance(), map);
+						cache.put(keyValue, v);
+					} catch (InstantiationException | IllegalAccessException e) {
+						logger.error("更新操作失败", e);
+					}
+					return v;
+				}
+				if (updateValue instanceof Number) {
+					Number n = (Number) updateValue;
+					
+					//increment(keyValue, updateKeyName, n, true, cls, false);
+					int fieldSerial = ValueMap.getValue(updateKeyName, cls);
+					final BinaryNumberIncrementor incrementor = new BinaryNumberIncrementor(n, true, fieldSerial);
+					cache.invoke(keyValue, incrementor);
+					
+					return (V) cache.get(keyValue);
+				}
+				//进行更新
+				int keySerial = ValueMap.getValue(keyName, cls);
+				int updateKeySerial = ValueMap.getValue(updateKeyName, cls);
+				
+				ValueExtractor key = new PofExtractor(String.class, keySerial);
+			    Filter filter = new EqualsFilter(key, keyValue); 
+			    ValueUpdater updater = new PofUpdater(updateKeySerial); 
+			    
+			    cache.invoke(filter, new UpdaterProcessor(updater, updateValue)); 
+			    
+				return (V) cache.get(keyValue);
 			}
 		}, cacheNameLocal);
-	    
-		return get(keyValue);
 	}
 	
 	@Override
@@ -381,23 +389,31 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 	}
 	
 	@Override
-	public boolean updateValues(K k, Map<String, Object> keyValues, Class<?> cls) {
+	public boolean updateValues(final K k, final Map<String, Object> keyValues, final Class<?> cls) {
 		
-		for (Map.Entry<String, Object> entry : keyValues.entrySet()) {  
-			String filedKey = entry.getKey();
-			Object value = entry.getValue();
-			int filedIndex = ValueMap.getValue(filedKey, cls);
-			if (filedIndex == -1) {
-				continue;
+		return template.execute(new CoherenceCallBack<Boolean>() {
+			@Override
+			public Boolean doInCoherence(NamedCache cache) throws DataAccessException {
+				
+				for (Map.Entry<String, Object> entry : keyValues.entrySet()) {  
+					String filedKey = entry.getKey();
+					Object value = entry.getValue();
+					int filedIndex = ValueMap.getValue(filedKey, cls);
+					if (filedIndex == -1) {
+						continue;
+					}
+					ValueUpdater updater = new PofUpdater(filedIndex);
+					boolean result = (Boolean) cache.invoke(k, new UpdaterProcessor(updater, value));
+					if (!result) {
+						logger.error("对应的key值[{}],更新为[{}]失败", filedKey, value);
+						return result;
+					}
+				}
+				
+				return true;
 			}
-			boolean result = update(k, filedIndex, value);
-			if (!result) {
-				logger.error("对应的key值[{}],更新为[{}]失败", filedKey, value);
-				return result;
-			}
-		}
+		}, cacheNameLocal);
 		
-		return true;
 	}
 	
 	@Override
@@ -414,7 +430,7 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 	
 	@Override
 	public Number increment(final K k, String incFieldName, Number n, boolean isRet, Class<?> cls) {
-		
+
 		int fieldSerial = ValueMap.getValue(incFieldName, cls);
 		final BinaryNumberIncrementor incrementor = new BinaryNumberIncrementor(n, isRet, fieldSerial);
 		return template.execute(new CoherenceCallBack<Number>() {
@@ -425,7 +441,7 @@ public class DefaultOperations<K, V> implements ValueOpreations<K, V> {
 			}
 		}, cacheNameLocal);
 	}
-	
+
 	@Override
 	public boolean isEmpty() {
 		return template.execute(new CoherenceCallBack<Boolean>() {
